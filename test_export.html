@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSM Քարտեզի Վերլուծություն - 2025-09-30 03:12</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        .main-section {
+            flex: 2;
+            padding: 30px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 30px;
+            border-left: 1px solid #dee2e6;
+        }
+        
+        .legend {
+            margin-bottom: 30px;
+        }
+        
+        .legend h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .legend-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .stats-section {
+            margin-bottom: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .map-visualization {
+            background: linear-gradient(45deg, #f8f9fa 25%, transparent 25%), 
+                        linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, #f8f9fa 75%), 
+                        linear-gradient(-45deg, transparent 75%, #f8f9fa 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            height: 300px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .map-title {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #495057;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .summary-stats h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.5em;
+        }
+        
+        .summary-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .footer {
+            background: #495057;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .timestamp {
+            color: #adb5bd;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ OSM Քարտեզի Վերլուծություն - 2025-09-30 03:12</h1>
+            <p>OpenStreetMap տվյալների մանրամասն վերլուծություն</p>
+        </div>
+        
+        <div class="content">
+            <div class="main-section">
+                <div class="map-visualization">
+                    <div class="map-title">OSM Քարտեզի Վիզուալացում</div>
+                </div>
+                
+                <div class="summary-stats">
+                    <h3>Ընդհանուր Տարրեր</h3>
+                    <p class="summary-number">2</p>
+                    <p>ակտիվ ֆիլտրներով</p>
+                </div>
+                
+                <div class="stats-section">
+                    <h3>Քարտեզի Վիճակագրություն</h3>
+                    <div class="stats-grid">
+        
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #ff6b6b;">1</div>
+                            <div class="stat-label">Շենքեր</div>
+                        </div>
+                
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #4ecdc4;">1</div>
+                            <div class="stat-label">Ճանապարհներ</div>
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="legend">
+                    <h3>🎨 Լեգենդ</h3>
+        
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ff6b6b;"></div>
+                        <div class="legend-label">Շենքեր</div>
+                    </div>
+                
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #4ecdc4;"></div>
+                        <div class="legend-label">Ճանապարհներ</div>
+                    </div>
+                
+                </div>
+                
+                <div class="stats-section">
+                    <h3>📊 Մանրամասն Վիճակագրություն</h3>
+                    <div class="stats-grid">
+        
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #ff6b6b;">1</div>
+                            <div class="stat-label">Շենքեր</div>
+                            <div class="stat-label">50.0%</div>
+                        </div>
+            
+                        <div class="stat-card">
+                            <div class="stat-number" style="color: #4ecdc4;">1</div>
+                            <div class="stat-label">Ճանապարհներ</div>
+                            <div class="stat-label">50.0%</div>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Ստեղծված OSM Քարտեզի Մշակիչ-ով</p>
+            <p class="timestamp">Ժամանակ: 2025-09-30 03:12</p>
+        </div>
+    </div>
+</body>
+</html>
+        

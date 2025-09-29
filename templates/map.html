@@ -173,6 +173,9 @@
                         <button class="btn btn-sm btn-danger" id="exportPDF">
                             <i class="fas fa-file-alt"></i> Էքսպորտ Հաշվետվություն
                         </button>
+                        <button class="btn btn-sm btn-warning" id="exportImage">
+                            <i class="fas fa-image"></i> Էքսպորտ Պատկեր
+                        </button>
                     </div>
                 </div>
             </div>
@@ -597,6 +600,48 @@ document.addEventListener('DOMContentLoaded', function() {
             button.innerHTML = originalText;
             button.disabled = false;
         }, 2000);
+    });
+
+    // Export Image button handler
+    document.getElementById('exportImage').addEventListener('click', function() {
+        // Get current filter settings
+        const filters = {
+            buildings: document.getElementById('showBuildings').checked,
+            roads: document.getElementById('showRoads').checked,
+            waterways: document.getElementById('showWaterways').checked,
+            education: document.getElementById('showEducation').checked,
+            healthcare: document.getElementById('showHealthcare').checked,
+            culture: document.getElementById('showCulture').checked,
+            tourism: document.getElementById('showTourism').checked,
+            food: document.getElementById('showFood').checked,
+            shopping: document.getElementById('showShopping').checked
+        };
+
+        // Create URL with filter parameters
+        const params = new URLSearchParams();
+        Object.keys(filters).forEach(key => {
+            params.append(key, filters[key]);
+        });
+
+        // Create download link
+        const downloadUrl = `/export_map_image?${params.toString()}`;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'osm_map_export.html';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Show success message
+        const button = this;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ստեղծվում է պատկեր...';
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }, 3000);
     });
 });
 </script>

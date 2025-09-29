@@ -16,6 +16,7 @@ import threading
 from datetime import datetime
 from io import BytesIO
 import base64
+from simple_image_export import SimpleMapImageExporter
 
 app = Flask(__name__)
 app.secret_key = 'osm_processor_secret_key_2024'
@@ -674,6 +675,64 @@ This report contains a summary of the OSM data analysis with current filter sett
 """
     
     return content
+
+@app.route('/export_map_image')
+def export_map_image():
+    """Export current map view as high-resolution image with legend and infographics."""
+    if not processor.current_data:
+        flash('No data available. Please upload a file first.')
+        return redirect(url_for('map_view'))
+
+    try:
+        # Get current filter settings
+        show_buildings = request.args.get('buildings', 'true').lower() == 'true'
+        show_roads = request.args.get('roads', 'true').lower() == 'true'
+        show_waterways = request.args.get('waterways', 'false').lower() == 'true'
+        show_education = request.args.get('education', 'false').lower() == 'true'
+        show_healthcare = request.args.get('healthcare', 'false').lower() == 'true'
+        show_culture = request.args.get('culture', 'false').lower() == 'true'
+        show_tourism = request.args.get('tourism', 'false').lower() == 'true'
+        show_food = request.args.get('food', 'false').lower() == 'true'
+        show_shopping = request.args.get('shopping', 'false').lower() == 'true'
+
+        # Create filters dictionary
+        filters = {
+            'buildings': show_buildings,
+            'roads': show_roads,
+            'waterways': show_waterways,
+            'education': show_education,
+            'healthcare': show_healthcare,
+            'culture': show_culture,
+            'tourism': show_tourism,
+            'food': show_food,
+            'shopping': show_shopping
+        }
+
+        # Generate timestamp for filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"osm_map_export_{timestamp}.html"
+
+        # Create image exporter
+        exporter = SimpleMapImageExporter()
+        
+        # Generate HTML-based export
+        export_buffer = exporter.create_export_file(
+            processor.analysis_results,
+            processor.current_data.get('bounds') if processor.current_data else None,
+            filters,
+            f"OSM Քարտեզի Վերլուծություն - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+        )
+
+        return send_file(
+            export_buffer,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='text/html'
+        )
+
+    except Exception as e:
+        flash(f'Image export failed: {str(e)}')
+        return redirect(url_for('map_view'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8081)
