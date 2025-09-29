@@ -176,6 +176,9 @@
                         <button class="btn btn-sm btn-warning" id="exportImage">
                             <i class="fas fa-image"></i> Էքսպորտ Պատկեր
                         </button>
+                        <button class="btn btn-sm btn-info" id="screenshotPage">
+                            <i class="fas fa-camera"></i> Դիտել Քարտեզը
+                        </button>
                     </div>
                 </div>
             </div>
@@ -642,6 +645,32 @@ document.addEventListener('DOMContentLoaded', function() {
             button.innerHTML = originalText;
             button.disabled = false;
         }, 3000);
+    });
+
+    // Screenshot Page button handler
+    document.getElementById('screenshotPage').addEventListener('click', function() {
+        // Get current filter settings
+        const filters = {
+            buildings: document.getElementById('showBuildings').checked,
+            roads: document.getElementById('showRoads').checked,
+            waterways: document.getElementById('showWaterways').checked,
+            education: document.getElementById('showEducation').checked,
+            healthcare: document.getElementById('showHealthcare').checked,
+            culture: document.getElementById('showCulture').checked,
+            tourism: document.getElementById('showTourism').checked,
+            food: document.getElementById('showFood').checked,
+            shopping: document.getElementById('showShopping').checked
+        };
+
+        // Create URL with filter parameters
+        const params = new URLSearchParams();
+        Object.keys(filters).forEach(key => {
+            params.append(key, filters[key]);
+        });
+
+        // Open screenshot page in new window
+        const screenshotUrl = `/screenshot_page?${params.toString()}`;
+        window.open(screenshotUrl, '_blank', 'width=1200,height=800');
     });
 });
 </script>

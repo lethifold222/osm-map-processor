@@ -16,7 +16,7 @@ import threading
 from datetime import datetime
 from io import BytesIO
 import base64
-from simple_image_export import SimpleMapImageExporter
+from screenshot_export import MapScreenshotExporter
 
 app = Flask(__name__)
 app.secret_key = 'osm_processor_secret_key_2024'
@@ -712,26 +712,87 @@ def export_map_image():
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"osm_map_export_{timestamp}.html"
 
-        # Create image exporter
-        exporter = SimpleMapImageExporter()
+        # Create screenshot exporter
+        exporter = MapScreenshotExporter()
         
-        # Generate HTML-based export
-        export_buffer = exporter.create_export_file(
+        # Generate screenshot export
+        export_buffer = exporter.create_screenshot_export(
             processor.analysis_results,
             processor.current_data.get('bounds') if processor.current_data else None,
             filters,
             f"OSM Քարտեզի Վերլուծություն - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
         )
 
+        # Determine mimetype based on content
+        export_buffer.seek(0)
+        first_bytes = export_buffer.read(4)
+        export_buffer.seek(0)
+        
+        if first_bytes.startswith(b'\x89PNG'):
+            mimetype = 'image/png'
+            filename = filename.replace('.html', '.png')
+        else:
+            mimetype = 'text/html'
+            filename = filename.replace('.png', '.html')
+
         return send_file(
             export_buffer,
             as_attachment=True,
             download_name=filename,
-            mimetype='text/html'
+            mimetype=mimetype
         )
 
     except Exception as e:
         flash(f'Image export failed: {str(e)}')
+        return redirect(url_for('map_view'))
+
+@app.route('/screenshot_page')
+def screenshot_page():
+    """Display a page specifically designed for taking screenshots."""
+    if not processor.current_data:
+        flash('No data available. Please upload a file first.')
+        return redirect(url_for('map_view'))
+
+    try:
+        # Get current filter settings
+        show_buildings = request.args.get('buildings', 'true').lower() == 'true'
+        show_roads = request.args.get('roads', 'true').lower() == 'true'
+        show_waterways = request.args.get('waterways', 'false').lower() == 'true'
+        show_education = request.args.get('education', 'false').lower() == 'true'
+        show_healthcare = request.args.get('healthcare', 'false').lower() == 'true'
+        show_culture = request.args.get('culture', 'false').lower() == 'true'
+        show_tourism = request.args.get('tourism', 'false').lower() == 'true'
+        show_food = request.args.get('food', 'false').lower() == 'true'
+        show_shopping = request.args.get('shopping', 'false').lower() == 'true'
+
+        # Create filters dictionary
+        filters = {
+            'buildings': show_buildings,
+            'roads': show_roads,
+            'waterways': show_waterways,
+            'education': show_education,
+            'healthcare': show_healthcare,
+            'culture': show_culture,
+            'tourism': show_tourism,
+            'food': show_food,
+            'shopping': show_shopping
+        }
+
+        # Create screenshot exporter
+        exporter = MapScreenshotExporter()
+        
+        # Generate HTML content
+        html_content = exporter.create_screenshot_html(
+            processor.analysis_results,
+            processor.current_data.get('bounds') if processor.current_data else None,
+            filters,
+            f"OSM Քարտեզի Վերլուծություն - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+        )
+
+        return html_content
+
+    except Exception as e:
+        flash(f'Screenshot page generation failed: {str(e)}')
         return redirect(url_for('map_view'))
 
 if __name__ == '__main__':
