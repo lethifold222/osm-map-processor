@@ -676,4 +676,4 @@ This report contains a summary of the OSM data analysis with current filter sett
     return content
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=8081)

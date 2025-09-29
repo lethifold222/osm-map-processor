@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Map View - OSM Map Processor{% endblock %}
+{% block title %}Ինտերակտիվ Քարտեզ - OSM Քարտեզի Մշակիչ{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -43,9 +43,9 @@
     <div class="row mb-4">
         <div class="col-lg-12 text-center">
             <h1 class="display-5 mb-3">
-                <i class="fas fa-map"></i> Map View
+                <i class="fas fa-map"></i> Ինտերակտիվ Քարտեզ
             </h1>
-            <p class="lead">Interactive visualization of your OSM data</p>
+            <p class="lead">Ձեր OSM տվյալների ինտերակտիվ վիզուալացում</p>
         </div>
     </div>
 
@@ -53,28 +53,28 @@
     <div class="row mb-4">
         <div class="col-lg-12">
             <div class="map-controls">
-                <h5 class="mb-3"><i class="fas fa-cog"></i> Display Options</h5>
+                <h5 class="mb-3"><i class="fas fa-cog"></i> Ցուցադրման Տարբերակներ</h5>
                 
                 <!-- Basic Infrastructure -->
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h6 class="text-primary"><i class="fas fa-building"></i> Infrastructure</h6>
+                        <h6 class="text-primary"><i class="fas fa-building"></i> Ինֆրակառուցվածք</h6>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input layer-toggle" type="checkbox" id="showBuildings" checked data-layer="buildings">
                             <label class="form-check-label" for="showBuildings">
-                                <i class="fas fa-building"></i> Buildings
+                                <i class="fas fa-building"></i> Շենքեր
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input layer-toggle" type="checkbox" id="showRoads" checked data-layer="roads">
                             <label class="form-check-label" for="showRoads">
-                                <i class="fas fa-road"></i> Roads
+                                <i class="fas fa-road"></i> Ճանապարհներ
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input layer-toggle" type="checkbox" id="showWaterways" data-layer="waterways">
                             <label class="form-check-label" for="showWaterways">
-                                <i class="fas fa-water"></i> Waterways
+                                <i class="fas fa-water"></i> Ջրային Ճանապարհներ
                             </label>
                         </div>
                     </div>
@@ -83,11 +83,11 @@
                 <!-- Education -->
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h6 class="text-success"><i class="fas fa-graduation-cap"></i> Education</h6>
+                        <h6 class="text-success"><i class="fas fa-graduation-cap"></i> Կրթություն</h6>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input layer-toggle" type="checkbox" id="showEducation" data-layer="education">
                             <label class="form-check-label" for="showEducation">
-                                <i class="fas fa-school"></i> Schools & Universities
+                                <i class="fas fa-school"></i> Դպրոցներ և Համալսարաններ
                             </label>
                         </div>
                     </div>
@@ -96,11 +96,11 @@
                 <!-- Healthcare -->
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h6 class="text-danger"><i class="fas fa-heartbeat"></i> Healthcare</h6>
+                        <h6 class="text-danger"><i class="fas fa-heartbeat"></i> Առողջապահություն</h6>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input layer-toggle" type="checkbox" id="showHealthcare" data-layer="healthcare">
                             <label class="form-check-label" for="showHealthcare">
-                                <i class="fas fa-hospital"></i> Hospitals & Clinics
+                                <i class="fas fa-hospital"></i> Հիվանդանոցներ և Կլինիկաներ
                             </label>
                         </div>
                     </div>
@@ -109,11 +109,11 @@
                 <!-- Culture -->
                 <div class="row mb-3">
                     <div class="col-lg-12">
-                        <h6 class="text-warning"><i class="fas fa-palette"></i> Culture & Entertainment</h6>
+                        <h6 class="text-warning"><i class="fas fa-palette"></i> Մշակույթ և Ճանաչողություն</h6>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input layer-toggle" type="checkbox" id="showCulture" data-layer="culture">
                             <label class="form-check-label" for="showCulture">
-                                <i class="fas fa-theater-masks"></i> Museums & Theaters
+                                <i class="fas fa-theater-masks"></i> Թանգարաններ և Թատրոններ
                             </label>
                         </div>
                     </div>
