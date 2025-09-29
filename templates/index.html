@@ -201,21 +201,21 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.click();
     });
     
-    // Handle analyze button click
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('button[type="submit"]')) {
-            if (fileInput.files.length === 0) {
-                alert('Խնդրում ենք ընտրել ֆայլ:');
-                e.preventDefault();
-                return false;
-            }
-            
-            // Show loading state
-            const submitBtn = e.target.closest('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Վերլուծում...';
-            submitBtn.disabled = true;
+    // Handle form submission
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        if (fileInput.files.length === 0) {
+            alert('Խնդրում ենք ընտրել ֆայլ:');
+            e.preventDefault();
+            return false;
         }
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Վերլուծում...';
+        submitBtn.disabled = true;
+        
+        // Allow form to submit normally
+        return true;
     });
 });
 </script>
