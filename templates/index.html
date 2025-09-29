@@ -81,7 +81,7 @@
                         <input type="file" name="file" id="fileInput" class="form-control" 
                                accept=".osm,.xml" required style="display: none;">
                         
-                        <button type="button" class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">
+                        <button type="button" class="btn btn-primary btn-lg" id="selectFileBtn">
                             <i class="fas fa-folder-open"></i> Ընտրել Ֆայլ
                         </button>
                         
@@ -176,6 +176,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Click to upload area (but not on buttons)
+    uploadArea.addEventListener('click', function(e) {
+        // Only trigger file selection if not clicking on a button
+        if (!e.target.closest('button')) {
+            fileInput.click();
+        }
+    });
+    
     // File input change
     fileInput.addEventListener('change', function(e) {
         if (e.target.files.length > 0) {
@@ -188,11 +196,26 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInfo.style.display = 'block';
     }
     
-    // Form submission with loading state
-    document.getElementById('uploadForm').addEventListener('submit', function() {
-        const submitBtn = this.querySelector('button[type="submit"]');
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        submitBtn.disabled = true;
+    // Handle select file button click
+    document.getElementById('selectFileBtn').addEventListener('click', function() {
+        fileInput.click();
+    });
+    
+    // Handle analyze button click
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('button[type="submit"]')) {
+            if (fileInput.files.length === 0) {
+                alert('Խնդրում ենք ընտրել ֆայլ:');
+                e.preventDefault();
+                return false;
+            }
+            
+            // Show loading state
+            const submitBtn = e.target.closest('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Վերլուծում...';
+            submitBtn.disabled = true;
+        }
     });
 });
 </script>

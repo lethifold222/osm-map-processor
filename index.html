@@ -333,8 +333,14 @@
         }
 
         // Initialize map
+        let map = null;
         function initializeMap() {
-            const map = L.map('map').setView([40.1776, 44.5126], 10); // Yerevan coordinates
+            // Check if map is already initialized
+            if (map) {
+                return; // Map already exists
+            }
+            
+            map = L.map('map').setView([40.1776, 44.5126], 10); // Yerevan coordinates
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
