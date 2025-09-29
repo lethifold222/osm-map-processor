@@ -796,4 +796,8 @@ def screenshot_page():
         return redirect(url_for('map_view'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8081)
+    # Get port from environment variable (Render sets this)
+    port = int(os.environ.get('PORT', 8081))
+    # Run in production mode on Render, debug mode locally
+    debug = os.environ.get('RENDER') is None
+    app.run(debug=debug, host='0.0.0.0', port=port)
