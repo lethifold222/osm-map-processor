@@ -1,0 +1,19 @@
+# Minimal example; adjust as needed.
+project_name: "demo_osm_project"
+input:
+  # You can use a bbox or a place name; if both set, bbox wins.
+  bbox: [44.430, 40.090, 44.550, 40.230]  # [minx, miny, maxx, maxy] (Yerevan-ish)
+  place: null
+output:
+  output_dir: "./outputs"
+  overwrite: true
+layers:
+  roads: true
+  buildings: true
+  amenities: ["school", "hospital", "restaurant"]
+  pois: ["bank", "atm", "pharmacy"]
+crs:
+  target_epsg: 3857
+visualize:
+  quick_preview: true
+  sample_n: 1000

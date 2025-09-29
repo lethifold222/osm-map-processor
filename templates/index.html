@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}OSM Քարտեզի Մշակիչ - Գլխավոր{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-map-marked-alt"></i> OSM Քարտեզի Մշակիչ
+        </h1>
+        <p class="lead mb-4">
+            Վերլուծեք OpenStreetMap տվյալները հեշտությամբ: Վերբեռնեք .osm ֆայլեր և ստացեք մանրամասն տեղեկություններ աշխարհագրական տվյալների մասին:
+        </p>
+        <p class="mb-0">
+            <strong>Ճարտարապետական կախվածություն չկա - աշխատում է ամենուր!</strong>
+        </p>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-12">
+                <h2 class="mb-4">Հնարավորություններ</h2>
+                <p class="lead">Հզոր OSM տվյալների վերլուծության հնարավորություններ</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-upload fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Հեշտ Վերբեռնում</h5>
+                        <p class="card-text">Վերբեռնեք .osm ֆայլեր ուղղակիորեն ձեր վեբ բրաուզերի միջոցով: Տեղադրում չի պահանջվում:</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-bar fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Մանրամասն Վերլուծություն</h5>
+                        <p class="card-text">Ստացեք համապարփակ վիճակագրություն nodes, ways, relations և աշխարհագրական հատկանիշների մասին:</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-download fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Արդյունքների Էքսպորտ</h5>
+                        <p class="card-text">Էքսպորտեք ձեր վերլուծության արդյունքները JSON կամ CSV ֆորմատով հետագա մշակման համար:</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upload Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h2>Վերբեռնել OSM Ֆայլ</h2>
+                    <p class="lead">Ընտրեք .osm ֆայլ վերլուծության համար</p>
+                </div>
+                
+                <div class="upload-area" id="uploadArea">
+                    <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="uploadForm">
+                        <i class="fas fa-cloud-upload-alt fa-4x text-muted mb-3"></i>
+                        <h4>Քաշեք և գցեք ձեր OSM ֆայլը այստեղ</h4>
+                        <p class="text-muted mb-4">կամ կտտացրեք ընտրելու համար</p>
+                        
+                        <input type="file" name="file" id="fileInput" class="form-control" 
+                               accept=".osm,.xml" required style="display: none;">
+                        
+                        <button type="button" class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-folder-open"></i> Ընտրել Ֆայլ
+                        </button>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                Աջակցվող ֆորմատներ: .osm, .xml<br>
+                                Առավելագույն ֆայլի չափս: 100MB
+                            </small>
+                        </div>
+                        
+                        <div id="fileInfo" class="mt-3" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="fas fa-file"></i> <span id="fileName"></span>
+                                <button type="submit" class="btn btn-success btn-sm ms-3">
+                                    <i class="fas fa-play"></i> Վերլուծել Ֆայլը
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-12">
+                <h2>How It Works</h2>
+                <p class="lead">Simple 3-step process</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 text-center mb-4">
+                <div class="mb-3">
+                    <span class="badge bg-primary rounded-circle p-3" style="font-size: 1.5rem;">1</span>
+                </div>
+                <h5>Upload</h5>
+                <p>Upload your .osm file using the drag & drop interface or file browser.</p>
+            </div>
+            
+            <div class="col-lg-4 text-center mb-4">
+                <div class="mb-3">
+                    <span class="badge bg-success rounded-circle p-3" style="font-size: 1.5rem;">2</span>
+                </div>
+                <h5>Analyze</h5>
+                <p>Our system automatically parses and analyzes your OSM data structure.</p>
+            </div>
+            
+            <div class="col-lg-4 text-center mb-4">
+                <div class="mb-3">
+                    <span class="badge bg-warning rounded-circle p-3" style="font-size: 1.5rem;">3</span>
+                </div>
+                <h5>Results</h5>
+                <p>View detailed statistics and export results in your preferred format.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            showFileInfo(files[0]);
+        }
+    });
+    
+    // File input change
+    fileInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+            showFileInfo(e.target.files[0]);
+        }
+    });
+    
+    function showFileInfo(file) {
+        fileName.textContent = file.name + ' (' + (file.size / 1024 / 1024).toFixed(2) + ' MB)';
+        fileInfo.style.display = 'block';
+    }
+    
+    // Form submission with loading state
+    document.getElementById('uploadForm').addEventListener('submit', function() {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+
+OSM File Analysis Report
+==================================================
+
+📊 Basic Statistics:
+• Total Nodes: 23,595
+• Total Ways: 4,659
+• Total Relations: 254
+• Total Elements: 28,508
+
+🏷️ Tags Information:
+• Unique Tags: 779
+• Sample Tags: Additional levels, ISO3166-2, abandoned:amenity, access, access:conditional, additional levels, addr, addr:city, addr:city:en, addr:country, addr:district, addr:door, addr:flats, addr:floor, addr:full, addr:housename, addr:housenumber, addr:postcode, addr:region, addr:street
+
+📁 File Information:
+• File Path: /Users/khachatur/Downloads/map.osm
+• File Size: 7.72 MB
+
+🔍 Data Quality:
+• Node/Way Ratio: 5.06
+• Way/Relation Ratio: 18.34
+
+💡 Recommendations:
+• This appears to be a medium dataset
+• Dataset size is suitable for full processing
+• High tag diversity suggests rich data
+
+==================================================
+Analysis completed successfully!
+

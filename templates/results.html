@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}Վերլուծության Արդյունքներ - OSM Քարտեզի Մշակիչ{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-12 text-center">
+            <h1 class="display-5 mb-3">
+                <i class="fas fa-chart-bar"></i> Վերլուծության Արդյունքներ
+            </h1>
+            <p class="lead">Ձեր OSM ֆայլի մանրամասն վերլուծություն</p>
+            <div class="text-muted">
+                <i class="fas fa-file"></i> {{ metadata.file_name }} 
+                <span class="ms-3"><i class="fas fa-weight"></i> {{ "%.2f"|format(metadata.file_size / 1024 / 1024) }} MB</span>
+                <span class="ms-3"><i class="fas fa-clock"></i> {{ metadata.processed_at[:19] }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Buttons -->
+    <div class="row mb-4">
+        <div class="col-lg-12 text-center">
+            <div class="btn-group" role="group">
+                <a href="{{ url_for('export_data', format_type='json') }}" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Էքսպորտ JSON
+                </a>
+                <a href="{{ url_for('export_data', format_type='csv') }}" class="btn btn-success">
+                    <i class="fas fa-download"></i> Էքսպորտ CSV
+                </a>
+                <a href="{{ url_for('map_view') }}" class="btn btn-info">
+                    <i class="fas fa-map"></i> Դիտել Քարտեզը
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <h3 class="mb-4"><i class="fas fa-calculator"></i> Հիմնական Վիճակագրություն</h3>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-dot-circle fa-2x mb-2"></i>
+                    <h4>{{ "{:,}".format(analysis.basic_stats.nodes) }}</h4>
+                    <p class="mb-0">Nodes</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-route fa-2x mb-2"></i>
+                    <h4>{{ "{:,}".format(analysis.basic_stats.ways) }}</h4>
+                    <p class="mb-0">Ways</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-sitemap fa-2x mb-2"></i>
+                    <h4>{{ "{:,}".format(analysis.basic_stats.relations) }}</h4>
+                    <p class="mb-0">Relations</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-layer-group fa-2x mb-2"></i>
+                    <h4>{{ "{:,}".format(analysis.basic_stats.total_elements) }}</h4>
+                    <p class="mb-0">Ընդհանուր Տարրեր</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Infrastructure Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <h3 class="mb-4"><i class="fas fa-building"></i> Ինֆրակառուցվածքի Վիճակագրություն</h3>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-building fa-2x mb-2 text-danger"></i>
+                    <h4>{{ "{:,}".format(analysis.way_analysis.get('buildings', 0)) }}</h4>
+                    <p class="mb-0">Շենքեր</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-road fa-2x mb-2 text-info"></i>
+                    <h4>{{ "{:,}".format(analysis.way_analysis.get('roads', 0)) }}</h4>
+                    <p class="mb-0">Ճանապարհներ</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-water fa-2x mb-2 text-primary"></i>
+                    <h4>{{ "{:,}".format(analysis.way_analysis.get('waterways', 0)) }}</h4>
+                    <p class="mb-0">Ջրային Ճանապարհներ</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marked-alt fa-2x mb-2 text-warning"></i>
+                    <h4>{{ "{:,}".format(analysis.way_analysis.get('amenities', 0)) }}</h4>
+                    <p class="mb-0">Օբյեկտներ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Amenities Detailed Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <h3 class="mb-4"><i class="fas fa-map-pin"></i> Օբյեկտներ Կատեգորիաներով</h3>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-graduation-cap fa-2x mb-2 text-success"></i>
+                    <h4>{{ "{:,}".format(analysis.amenity_details.get('education', 0)) }}</h4>
+                    <p class="mb-0">Կրթություն</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-heartbeat fa-2x mb-2 text-danger"></i>
+                    <h4>{{ "{:,}".format(analysis.amenity_details.get('healthcare', 0)) }}</h4>
+                    <p class="mb-0">Առողջապահություն</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-palette fa-2x mb-2 text-warning"></i>
+                    <h4>{{ "{:,}".format(analysis.amenity_details.get('culture', 0)) }}</h4>
+                    <p class="mb-0">Մշակույթ</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-bed fa-2x mb-2" style="color: #17a2b8;"></i>
+                    <h4>{{ "{:,}".format(analysis.amenity_details.get('tourism', 0)) }}</h4>
+                    <p class="mb-0">Տուրիզմ</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-utensils fa-2x mb-2 text-secondary"></i>
+                    <h4>{{ "{:,}".format(analysis.amenity_details.get('food', 0)) }}</h4>
+                    <p class="mb-0">Սնունդ և Խմիչք</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-shopping-cart fa-2x mb-2 text-dark"></i>
+                    <h4>{{ "{:,}".format(analysis.amenity_details.get('shopping', 0)) }}</h4>
+                    <p class="mb-0">Գնումներ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Way Analysis -->
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-road"></i> Way Types</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Count</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for way_type, count in analysis.way_analysis.items() %}
+                                <tr>
+                                    <td>{{ way_type.replace('_', ' ').title() }}</td>
+                                    <td>{{ "{:,}".format(count) }}</td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar" style="width: {{ (count / analysis.basic_stats.ways * 100) if analysis.basic_stats.ways > 0 else 0 }}%">
+                                                {{ "%.1f"|format(count / analysis.basic_stats.ways * 100) if analysis.basic_stats.ways > 0 else 0 }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-tags"></i> Tag Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Unique Tags:</strong> {{ "{:,}".format(analysis.tag_analysis.unique_tags) }}
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Tag</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tag, count in analysis.tag_analysis.most_common_tags.items() %}
+                                <tr>
+                                    <td><code>{{ tag }}</code></td>
+                                    <td>{{ "{:,}".format(count) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bounds and Quality Metrics -->
+    {% if analysis.bounds_info %}
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-globe"></i> Geographic Bounds</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Southwest:</strong><br>
+                            <small>{{ "%.6f"|format(analysis.bounds_info.minlat) }}, {{ "%.6f"|format(analysis.bounds_info.minlon) }}</small>
+                        </div>
+                        <div class="col-6">
+                            <strong>Northeast:</strong><br>
+                            <small>{{ "%.6f"|format(analysis.bounds_info.maxlat) }}, {{ "%.6f"|format(analysis.bounds_info.maxlon) }}</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Size:</strong><br>
+                            <small>{{ "%.6f"|format(analysis.bounds_info.maxlat - analysis.bounds_info.minlat) }}° × {{ "%.6f"|format(analysis.bounds_info.maxlon - analysis.bounds_info.minlon) }}°</small>
+                        </div>
+                        <div class="col-6">
+                            <strong>Estimated Area:</strong><br>
+                            <small>{{ "%.2f"|format(analysis.quality_metrics.estimated_area_km2) }} km²</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Quality Metrics</h5>
+                </div>
+                <div class="card-body">
+                    {% for metric, value in analysis.quality_metrics.items() %}
+                    <div class="mb-2">
+                        <strong>{{ metric.replace('_', ' ').title() }}:</strong>
+                        {% if value is number %}
+                            {% if 'ratio' in metric %}
+                                {{ "%.2f"|format(value) }}
+                            {% elif 'area' in metric %}
+                                {{ "%.2f"|format(value) }} km²
+                            {% elif 'per_km2' in metric %}
+                                {{ "%.0f"|format(value) }} elements/km²
+                            {% else %}
+                                {{ "%.4f"|format(value) }}
+                            {% endif %}
+                        {% else %}
+                            {{ value }}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recommendations -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Analysis & Recommendations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h6>Dataset Size Assessment:</h6>
+                            {% if analysis.basic_stats.total_elements > 1000000 %}
+                            <p class="text-info"><i class="fas fa-info-circle"></i> Large dataset - consider using spatial filtering for better performance.</p>
+                            {% elif analysis.basic_stats.total_elements > 100000 %}
+                            <p class="text-success"><i class="fas fa-check-circle"></i> Medium dataset - suitable for most applications.</p>
+                            {% else %}
+                            <p class="text-primary"><i class="fas fa-info-circle"></i> Small dataset - good for detailed analysis.</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <h6>Data Quality:</h6>
+                            {% if analysis.quality_metrics.get('node_way_ratio', 0) > 10 %}
+                            <p class="text-success"><i class="fas fa-check-circle"></i> High node density - detailed street network.</p>
+                            {% elif analysis.quality_metrics.get('node_way_ratio', 0) > 5 %}
+                            <p class="text-warning"><i class="fas fa-exclamation-triangle"></i> Medium node density - moderate detail.</p>
+                            {% else %}
+                            <p class="text-info"><i class="fas fa-info-circle"></i> Low node density - simplified network.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <h6>Feature Analysis:</h6>
+                            {% set building_ratio = (analysis.way_analysis.get('buildings', 0) / analysis.basic_stats.ways * 100) if analysis.basic_stats.ways > 0 else 0 %}
+                            {% if building_ratio > 30 %}
+                            <p><i class="fas fa-building"></i> High building density - urban area</p>
+                            {% elif building_ratio > 10 %}
+                            <p><i class="fas fa-home"></i> Moderate building density - suburban area</p>
+                            {% else %}
+                            <p><i class="fas fa-tree"></i> Low building density - rural area</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{
+  "nodes": 23595,
+  "ways": 4659,
+  "relations": 254,
+  "total_elements": 28508,
+  "unique_tags": 779,
+  "sample_tags": [
+    "Additional levels",
+    "ISO3166-2",
+    "abandoned:amenity",
+    "access",
+    "access:conditional",
+    "additional levels",
+    "addr",
+    "addr:city",
+    "addr:city:en",
+    "addr:country",
+    "addr:district",
+    "addr:door",
+    "addr:flats",
+    "addr:floor",
+    "addr:full",
+    "addr:housename",
+    "addr:housenumber",
+    "addr:postcode",
+    "addr:region",
+    "addr:street"
+  ]
+}
